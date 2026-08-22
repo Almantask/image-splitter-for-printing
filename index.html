@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Splitter for Printing — Multi-Page Poster PDF Generator</title>
+  <meta name="description" content="Split any high-resolution image across multiple sheets of paper and download a print-ready multi-page PDF. Client-side, fast, accessible, and free.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232563eb%22/><path d=%22M25 25h20v20H25zm30 0h20v20H55zM25 55h20v20H25zm30 0h20v20H55z%22 fill=%22%23ffffff%22/></svg>">
+</head>
+<body>
+  <!-- Skip to Main Content for Accessibility (WCAG 2.4.1) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Live Announcer Region for Screen Readers (WCAG 4.1.3) -->
+  <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header" role="banner">
+      <div class="header-main">
+        <div class="logo-group">
+          <div class="app-logo" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="12" y1="3" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <div>
+            <h1 class="app-title">Image Splitter for Printing</h1>
+            <p class="app-subtitle">Tile any image across standard sheets for easy multi-page poster printing</p>
+          </div>
+        </div>
+
+        <!-- Header Actions: Theme Toggle & Print Guide -->
+        <div class="header-actions">
+          <button id="theme-toggle-btn" class="btn btn-ghost theme-toggle" type="button" aria-label="Toggle color theme (Light / Dark mode)">
+            <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span class="theme-label">Theme</span>
+          </button>
+          
+          <button id="open-guide-btn" class="btn btn-ghost" type="button" aria-label="Open poster printing and assembly instructions">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Print Guide</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Error Banner (WCAG 3.3.1 & 4.1.3) -->
+    <div id="error-message" class="error-banner hidden" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="error-content">
+        <svg class="error-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="error-text"></span>
+      </div>
+      <button id="error-close" class="btn-icon" aria-label="Dismiss error notification" type="button">×</button>
+    </div>
+
+    <!-- Main Grid Layout -->
+    <main id="main-content" class="main-layout" tabindex="-1">
+      <!-- Left Panel: Controls & Inputs -->
+      <section class="controls-panel" aria-label="Configuration Steps">
+        
+        <!-- Step 1: Image Input Card -->
+        <section class="card step-card" aria-labelledby="step-1-title">
+          <div class="step-header">
+            <span class="step-badge" aria-hidden="true">1</span>
+            <h2 id="step-1-title">Image Input</h2>
+          </div>
+
+          <!-- Hidden Native File Input (Always hidden from DOM flow) -->
+          <input type="file" id="file-input" class="hidden-file-input" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/svg+xml" aria-hidden="true" tabindex="-1">
+
+          <!-- Drop Zone (Initial State) -->
+          <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-describedby="drop-hint-text" aria-label="Upload image: drop image here or press Enter to browse files">
+            <div class="drop-icon-badge" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                <path d="M12 12v9"></path>
+                <path d="m8 16 4-4 4 4"></path>
+              </svg>
+            </div>
+            <div class="drop-text-wrapper">
+              <p class="drop-title"><span class="browse-link">Choose image</span> or drag & drop here</p>
+              <p id="drop-hint-text" class="drop-hint">JPG, PNG, WebP, GIF, SVG &bull; Paste with Ctrl+V</p>
+            </div>
+          </div>
+
+          <!-- Loaded Image Summary Card (Active when image is loaded) -->
+          <div id="image-summary-card" class="image-summary-card hidden">
+            <div class="thumbnail-wrapper">
+              <img id="image-thumbnail" class="image-thumbnail" alt="Loaded image thumbnail preview" src="" />
+            </div>
+            <div class="image-summary-info">
+              <div class="summary-name-row">
+                <strong id="summary-file-name" class="summary-file-name" title="File name">image.png</strong>
+                <span id="summary-aspect-badge" class="aspect-badge">16:9</span>
+              </div>
+              <p id="summary-dimensions" class="summary-dimensions">4000 × 3000 px</p>
+              <div class="image-summary-actions">
+                <button id="replace-image-btn" class="btn btn-xs btn-secondary" type="button" aria-label="Replace current image with another file">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                  Replace
+                </button>
+                <button id="clear-image-btn" class="btn btn-xs btn-ghost text-danger" type="button" aria-label="Remove current image">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  Clear
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Elegant Divider -->
+          <div class="input-divider" aria-hidden="true">
+            <span>or load from link</span>
+          </div>
+
+          <!-- URL Input Row -->
+          <div class="url-input-group">
+            <div class="input-with-icon">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+              <input type="url" id="url-input" class="form-control url-input" placeholder="https://example.com/poster.jpg" aria-label="Image web URL">
+            </div>
+            <button id="load-url-btn" class="btn btn-secondary btn-action" type="button" aria-label="Load image from specified web URL">Load</button>
+            <button id="load-sample-btn" class="btn btn-ghost btn-action" type="button" aria-label="Load sample poster demo image">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              </svg>
+              <span>Sample</span>
+            </button>
+          </div>
+
+          <!-- Image Meta Readout (Status Alert) -->
+          <div id="image-meta" class="image-meta hidden" role="status" aria-live="polite">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span id="image-meta-text">photo.jpg — 4000 × 3000 px</span>
+          </div>
+        </section>
+
+        <!-- Step 2: Layout Settings Card -->
+        <section class="card step-card" aria-labelledby="step-2-title">
+          <div class="step-header">
+            <span class="step-badge" aria-hidden="true">2</span>
+            <h2 id="step-2-title">Layout Settings</h2>
+          </div>
+
+          <!-- Quick Preset Sizes Pills -->
+          <div class="presets-section">
+            <span class="setting-label">Quick Presets</span>
+            <div class="preset-pills" role="group" aria-label="Quick Poster Size Presets">
+              <button type="button" class="preset-pill" data-sheets="2" data-paper="A4">2 Sheets (Compact)</button>
+              <button type="button" class="preset-pill active" data-sheets="3" data-paper="A4">3 Sheets (Standard)</button>
+              <button type="button" class="preset-pill" data-sheets="4" data-paper="A4">4 Sheets (Large)</button>
+              <button type="button" class="preset-pill" data-sheets="6" data-paper="A3">6 Sheets (Big Wall)</button>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <!-- Paper Format -->
+            <div class="setting-item">
+              <div class="label-with-tooltip">
+                <label for="paper-format" class="setting-label">Paper Format</label>
+                <span id="paper-dim-hint" class="unit-tag">210 × 297 mm</span>
+              </div>
+              <div class="select-wrapper">
+                <select id="paper-format" class="form-control" aria-label="Paper Format">
+                  <option value="A0">A0 — 841 × 1189 mm (Architectural)</option>
+                  <option value="A1">A1 — 594 × 841 mm (Extra Large)</option>
+                  <option value="A2">A2 — 420 × 594 mm (Medium Poster)</option>
+                  <option value="A3">A3 — 297 × 420 mm (Tabloid / Large Desk)</option>
+                  <option value="A4" selected>A4 — 210 × 297 mm (Standard Printer)</option>
+                  <option value="A5">A5 — 148 × 210 mm (Half Letter)</option>
+                  <option value="A6">A6 — 105 × 148 mm (Postcard)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Sheet Orientation -->
+            <fieldset class="setting-item border-none p-0 m-0">
+              <legend class="setting-label mb-1">Sheet Orientation</legend>
+              <div class="segmented-control" role="radiogroup" aria-label="Sheet Orientation">
+                <label class="segment-option" for="orientation-portrait">
+                  <input type="radio" name="orientation" value="portrait" id="orientation-portrait" checked>
+                  <span class="segment-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                      <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                    </svg>
+                    Portrait
+                  </span>
+                </label>
+                <label class="segment-option" for="orientation-landscape">
+                  <input type="radio" name="orientation" value="landscape" id="orientation-landscape">
+                  <span class="segment-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                      <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                    </svg>
+                    Landscape
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Margins (mm) with Stepper + Slider + Quick Toggles -->
+            <div class="setting-item">
+              <div class="label-with-tooltip">
+                <label for="margin-input" class="setting-label">Page Margin</label>
+                <div class="quick-tags">
+                  <button type="button" class="tag-btn" data-margin="0">0mm</button>
+                  <button type="button" class="tag-btn" data-margin="5">5mm</button>
+                  <button type="button" class="tag-btn" data-margin="10">10mm</button>
+                </div>
+              </div>
+              <div class="slider-with-number">
+                <input type="range" id="margin-slider" class="range-slider" min="0" max="25" value="0" step="1" aria-label="Page margin slider">
+                <div class="stepper-group" role="group" aria-label="Adjust page margin in millimeters">
+                  <button type="button" id="margin-dec" class="stepper-btn" aria-label="Decrease margin by 1 millimeter">−</button>
+                  <input type="number" id="margin-input" class="form-control text-center" min="0" max="25" value="0" step="1" aria-describedby="margin-hint" aria-label="Page margin in millimeters (0 to 25)">
+                  <button type="button" id="margin-inc" class="stepper-btn" aria-label="Increase margin by 1 millimeter">+</button>
+                </div>
+              </div>
+              <p id="margin-hint" class="setting-hint">White border on each sheet for clean manual trimming (0–25 mm)</p>
+            </div>
+
+            <!-- Poster Width (Sheets) with Stepper + Slider -->
+            <div class="setting-item">
+              <div class="label-with-tooltip">
+                <label for="sheets-wide-input" class="setting-label">Poster Width</label>
+                <span id="computed-grid-size" class="unit-tag">3 × 2 grid</span>
+              </div>
+              <div class="slider-with-number">
+                <input type="range" id="sheets-wide-slider" class="range-slider" min="1" max="20" value="3" step="1" aria-label="Poster width sheets slider">
+                <div class="stepper-group" role="group" aria-label="Adjust poster width in sheets">
+                  <button type="button" id="sheets-wide-dec" class="stepper-btn" aria-label="Decrease poster width by 1 sheet">−</button>
+                  <input type="number" id="sheets-wide-input" class="form-control text-center" min="1" max="20" value="3" step="1" aria-describedby="sheets-hint" aria-label="Poster width in sheets (1 to 20)">
+                  <button type="button" id="sheets-wide-inc" class="stepper-btn" aria-label="Increase poster width by 1 sheet">+</button>
+                </div>
+              </div>
+              <p id="sheets-hint" class="setting-hint">Number of sheets across the width. Height is automatically computed to maintain aspect ratio.</p>
+            </div>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- Right Panel: Live Preview & PDF Download -->
+      <section class="preview-panel" aria-labelledby="preview-heading">
+        <div class="card preview-card">
+          <!-- Preview Header & Stats Info Line -->
+          <div class="preview-header">
+            <div>
+              <div class="preview-title-row">
+                <h2 id="preview-heading" class="preview-title">Live Preview</h2>
+                <span id="interactive-hint" class="interactive-hint hidden">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Hover tiles to inspect individual sheet details
+                </span>
+              </div>
+
+              <!-- Primary Summary Metric Badges -->
+              <div class="info-badges" role="region" aria-label="Poster Layout Summary" aria-live="polite">
+                <span id="info-dimensions" class="info-badge highlight" aria-label="Total poster dimensions">0.0 cm × 0.0 cm</span>
+                <span id="info-area" class="info-badge" aria-label="Total surface area">0.00 m²</span>
+                <span id="info-sheet-count" class="info-badge" aria-label="Sheet arrangement and total count">3 × 2 = 6 sheets, A4 Portrait</span>
+                <span id="info-dpi" class="info-badge dpi-badge" aria-label="Effective print resolution">~161 DPI</span>
+                <span id="dpi-warning-badge" class="warning-badge hidden" role="alert">Low resolution</span>
+                <span id="sheet-warning-badge" class="warning-badge danger hidden" role="alert">Sheet limit exceeded</span>
+              </div>
+            </div>
+
+            <!-- Floating Viewport Controls Toolbar -->
+            <div class="viewport-toolbar" role="toolbar" aria-label="Preview Viewport Controls">
+              <button type="button" id="toggle-guides-btn" class="btn-tool active" title="Toggle Margin and Cut Guides" aria-label="Toggle Margin and Cut Guides" aria-pressed="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"></rect></svg>
+              </button>
+              <button type="button" id="toggle-badges-btn" class="btn-tool active" title="Toggle Sheet Page Numbers" aria-label="Toggle Sheet Page Numbers" aria-pressed="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              </button>
+              <div class="toolbar-divider" aria-hidden="true"></div>
+              <button type="button" id="zoom-out-btn" class="btn-tool" title="Zoom Out" aria-label="Zoom Out">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              </button>
+              <button type="button" id="zoom-reset-btn" class="btn-tool btn-tool-text" title="Reset Fit" aria-label="Reset Fit">Fit</button>
+              <button type="button" id="zoom-in-btn" class="btn-tool" title="Zoom In" aria-label="Zoom In">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas Viewport with Fallback and Interactive Tooltip Overlay -->
+          <div class="canvas-viewport" id="preview-section">
+            <!-- Sheet Hover Tooltip Overlay -->
+            <div id="tile-hover-tooltip" class="tile-hover-tooltip hidden" aria-hidden="true">
+              <span id="tooltip-page-title" class="tooltip-title">Page 1 of 6</span>
+              <span id="tooltip-details" class="tooltip-body">Row 1, Column 1 (210 × 297 mm)</span>
+            </div>
+
+            <!-- Empty Placeholder -->
+            <div id="preview-placeholder" class="preview-empty-state" aria-hidden="false">
+              <div class="empty-icon" aria-hidden="true">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" focusable="false">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+              <p class="empty-title">No image loaded yet</p>
+              <p class="empty-subtitle">Upload or drop an image above to see the live interactive poster preview</p>
+            </div>
+
+            <canvas id="preview-canvas" class="preview-canvas hidden" role="img" aria-label="Visual preview of the image divided across multiple printable sheets with grid overlays and page numbers">
+              <p>Your browser does not support canvas preview. Use the Download PDF button below to export your poster sheets.</p>
+            </canvas>
+          </div>
+
+          <!-- Download Action Bar -->
+          <div class="download-section">
+            <div class="download-action-group">
+              <button id="download-btn" class="btn btn-primary btn-large" type="button" disabled aria-describedby="print-hint-instruction">
+                <svg class="btn-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span id="download-btn-text">Download Print-Ready PDF</span>
+              </button>
+            </div>
+
+            <!-- Progress Bar (WCAG 4.1.2) -->
+            <div id="download-progress" class="progress-container hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="Building PDF: 0% complete" aria-label="PDF assembly progress">
+              <div class="progress-track">
+                <div id="progress-bar" class="progress-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="print-instruction-row">
+              <p id="print-hint-instruction" class="print-instruction">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Print at <strong>100% scale / Actual Size</strong> (disable "fit to page" in print dialog).
+              </p>
+              <button type="button" id="instruction-link-btn" class="link-btn" aria-label="Show step by step printing guide">How to assemble?</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer" role="contentinfo">
+      <p>All image processing and PDF generation happen 100% client-side in your browser. No files or personal data are ever uploaded to any server.</p>
+    </footer>
+  </div>
+
+  <!-- Print & Assembly Modal Dialog -->
+  <dialog id="guide-modal" class="modal-dialog" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Poster Printing & Assembly Guide
+        </h2>
+        <button id="close-modal-btn" class="btn-icon" aria-label="Close guide dialog" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="guide-steps">
+          <div class="guide-step">
+            <span class="guide-num">1</span>
+            <div>
+              <h3>Print at Actual Size (100%)</h3>
+              <p>In your PDF viewer print settings, choose <strong>"Actual Size"</strong> or scale <strong>100%</strong>. Disable "Fit to Page" or "Shrink oversized pages" so sheet boundaries align seamlessly.</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <span class="guide-num">2</span>
+            <div>
+              <h3>Trim the Margins</h3>
+              <p>If you configured a margin (e.g. 5–10 mm), use a ruler and craft knife or scissors to cut along the outer white borders.</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <span class="guide-num">3</span>
+            <div>
+              <h3>Assemble in Reading Order</h3>
+              <p>Sheets are ordered left-to-right, row-by-row (Page 1 is top-left). Butt adjacent pages together and secure them on the back with tape.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-got-it-btn" class="btn btn-primary" type="button">Got it, let's print!</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Vendored Libraries -->
+  <script src="vendor/jspdf.umd.min.js"></script>
+
+  <!-- Application Modules -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

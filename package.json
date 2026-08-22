@@ -1,0 +1,16 @@
+{
+  "name": "image-splitter-for-printing",
+  "version": "1.0.0",
+  "description": "Split any image into multi-page print-ready PDFs",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "start": "npx serve ."
+  },
+  "keywords": ["image-splitter", "poster-printer", "rasterbator", "pdf", "printing"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jspdf": "^2.5.2"
+  }
+}
