@@ -1,13 +1,13 @@
 {
-  "name": "image-splitter-for-printing",
+  "name": "map-to-poster",
   "version": "1.0.0",
-  "description": "Split any image into multi-page print-ready PDFs",
+  "description": "Map to Poster — Split high-res maps and images into print-ready multi-page PDFs",
   "type": "module",
   "scripts": {
     "test": "node --test test/*.test.js",
     "start": "npx serve ."
   },
-  "keywords": ["image-splitter", "poster-printer", "rasterbator", "pdf", "printing"],
+  "keywords": ["map-to-poster", "map-splitter", "image-splitter", "poster-printer", "rasterbator", "pdf", "printing"],
   "author": "",
   "license": "MIT",
   "devDependencies": {

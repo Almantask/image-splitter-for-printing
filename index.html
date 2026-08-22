@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Splitter for Printing — Multi-Page Poster PDF Generator</title>
-  <meta name="description" content="Split any high-resolution image across multiple sheets of paper and download a print-ready multi-page PDF. Client-side, fast, accessible, and free.">
+  <title>Map to Poster — Multi-Page PDF Poster & Map Generator</title>
+  <meta name="description" content="Map to Poster: Split high-resolution maps, photos, and artwork across multiple sheets of paper and download print-ready multi-page PDFs. 100% client-side and free.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,14 +28,14 @@
         <div class="logo-group">
           <div class="app-logo" aria-hidden="true">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="12" y1="3" x2="12" y2="21"></line>
+              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+              <line x1="9" y1="3" x2="9" y2="18"></line>
+              <line x1="15" y1="6" x2="15" y2="21"></line>
             </svg>
           </div>
           <div>
-            <h1 class="app-title">Image Splitter for Printing</h1>
-            <p class="app-subtitle">Tile any image across standard sheets for easy multi-page poster printing</p>
+            <h1 class="app-title">Map to Poster</h1>
+            <p class="app-subtitle">Tile any map or image across standard sheets for easy multi-page poster printing</p>
           </div>
         </div>
 
@@ -89,18 +89,18 @@
       <!-- Left Panel: Controls & Inputs -->
       <section class="controls-panel" aria-label="Configuration Steps">
         
-        <!-- Step 1: Image Input Card -->
+        <!-- Step 1: Map & Image Input Card -->
         <section class="card step-card" aria-labelledby="step-1-title">
           <div class="step-header">
             <span class="step-badge" aria-hidden="true">1</span>
-            <h2 id="step-1-title">Image Input</h2>
+            <h2 id="step-1-title">Map & Image Input</h2>
           </div>
 
           <!-- Hidden Native File Input (Always hidden from DOM flow) -->
           <input type="file" id="file-input" class="hidden-file-input" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/svg+xml" aria-hidden="true" tabindex="-1">
 
           <!-- Drop Zone (Initial State) -->
-          <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-describedby="drop-hint-text" aria-label="Upload image: drop image here or press Enter to browse files">
+          <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-describedby="drop-hint-text" aria-label="Upload map or image: drop file here or press Enter to browse">
             <div class="drop-icon-badge" aria-hidden="true">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
                 <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
@@ -109,7 +109,7 @@
               </svg>
             </div>
             <div class="drop-text-wrapper">
-              <p class="drop-title"><span class="browse-link">Choose image</span> or drag & drop here</p>
+              <p class="drop-title"><span class="browse-link">Choose map or image</span> or drag & drop here</p>
               <p id="drop-hint-text" class="drop-hint">JPG, PNG, WebP, GIF, SVG &bull; Paste with Ctrl+V</p>
             </div>
           </div>

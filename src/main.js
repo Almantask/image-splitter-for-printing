@@ -14,7 +14,7 @@ const state = {
   layout: null,
   
   // UX Interaction State
-  theme: localStorage.getItem('image-splitter-theme') || 'dark',
+  theme: localStorage.getItem('map-to-poster-theme') || localStorage.getItem('image-splitter-theme') || 'dark',
   zoomLevel: 1.0,
   showGuides: true,
   showBadges: true,
@@ -169,7 +169,7 @@ function getAspectRatioLabel(width, height) {
 function applyTheme(theme) {
   state.theme = theme;
   elements.html.setAttribute('data-theme', theme);
-  localStorage.setItem('image-splitter-theme', theme);
+  localStorage.setItem('map-to-poster-theme', theme);
   if (state.loadedImage && state.layout) {
     renderCanvas();
   }
@@ -410,19 +410,20 @@ function loadSampleImage() {
     ctx.fill();
   }
 
+  // Clean typographic poster content
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 160px system-ui, sans-serif';
+  ctx.font = 'bold 150px system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('POSTER ART DEMO', 1500, 900);
+  ctx.fillText('MAP TO POSTER', 1500, 900);
 
-  ctx.font = '500 70px system-ui, sans-serif';
+  ctx.font = '500 68px system-ui, sans-serif';
   ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-  ctx.fillText('3000 × 2000 High-Res Artwork', 1500, 1100);
+  ctx.fillText('High-Res Map & Artwork Demo (3000 × 2000 px)', 1500, 1100);
 
   canvas.toBlob((blob) => {
     if (blob) {
-      loadImageFromBlob(blob, 'sample-poster.png')
+      loadImageFromBlob(blob, 'sample-map-poster.png')
         .then(handleImageLoaded)
         .catch((err) => showError(err.message));
     }

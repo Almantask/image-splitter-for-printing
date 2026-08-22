@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to **Image Splitter for Printing** are documented here.
+All notable changes to **Map to Poster** are documented here.
 
 ---
 
@@ -9,7 +9,7 @@ All notable changes to **Image Splitter for Printing** are documented here.
 **Live Deployment:** [https://almantask.github.io/image-splitter-for-printing/](https://almantask.github.io/image-splitter-for-printing/)
 
 ### Features
-- **Client-Side Image Splitting**: Slice any image across a grid of standard ISO sheets (A0–A6) and export print-ready multi-page PDFs.
+- **Map & Image Splitting**: Slice any map, photo, or artwork across a grid of standard ISO sheets (A0–A6) and export print-ready multi-page PDFs.
 - **Multiple Image Sources**:
   - Drag and drop zone with interactive file browser.
   - Web URL loader with CORS error detection and user guidance.

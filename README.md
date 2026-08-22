@@ -1,4 +1,4 @@
-# Image Splitter for Printing
+# Map to Poster
 
 [![Deploy to GitHub Pages](https://github.com/Almantask/image-splitter-for-printing/actions/workflows/deploy.yml/badge.svg)](https://github.com/Almantask/image-splitter-for-printing/actions/workflows/deploy.yml)
 [![Release](https://img.shields.io/github/v/release/Almantask/image-splitter-for-printing?color=blue)](https://github.com/Almantask/image-splitter-for-printing/releases)
@@ -6,9 +6,9 @@
 
 > 🚀 **Live Application:** [https://almantask.github.io/image-splitter-for-printing/](https://almantask.github.io/image-splitter-for-printing/)
 
-A fast, client-side, single-page web application to split high-resolution images across multiple standard paper sheets (A0–A6) and download print-ready multi-page PDFs.
+**Map to Poster** is a fast, client-side, single-page web application to split high-resolution maps, diagrams, and images across multiple standard paper sheets (A0–A6) and download print-ready multi-page PDFs.
 
-Inspired by [rasterbator.net](https://rasterbator.net/), stripped to the essentials: load an image, choose paper and layout settings, see a live preview of the tiled poster with sheet boundaries and effective print DPI, and export a ready-to-print multi-page PDF.
+Inspired by [rasterbator.net](https://rasterbator.net/), stripped to the essentials: load a map or image, choose paper and layout settings, see a live preview of the tiled poster with sheet boundaries and effective print DPI, and export a ready-to-print multi-page PDF.
 
 ---
 
@@ -21,13 +21,13 @@ Open the application directly in your browser with zero installation:
 
 ## Features
 
-- **Zero Server / 100% Client-Side**: All image manipulation and PDF generation happen directly inside your browser. No files are uploaded to any server.
+- **Zero Server / 100% Client-Side**: All image/map manipulation and PDF generation happen directly inside your browser. No files are uploaded to any server.
 - **Multiple Input Methods**:
-  - Drag & drop images onto the drop zone
+  - Drag & drop maps and images onto the drop zone
   - Browse local files (`.jpg`, `.png`, `.webp`, `.gif`, `.bmp`, `.svg`)
   - Direct URL image loading with CORS error handling
   - Paste directly from clipboard (`Ctrl+V` / `Cmd+V`)
-  - Instant built-in demo sample
+  - Instant built-in map demo sample
 - **Comprehensive Layout Controls**:
   - Standard ISO 216 paper formats: **A0, A1, A2, A3, A4, A5, A6**
   - Orientation toggle: **Portrait** / **Landscape**
