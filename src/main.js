@@ -373,36 +373,50 @@ function handleClearImage() {
  * Loads the user-provided high-resolution battle map demo sample.
  */
 async function loadSampleImage() {
-  try {
-    const img = await loadImageFromUrl('sample-map.jpg');
-    img.fileName = 'fantasy-river-battlemap.jpg';
-    handleImageLoaded(img);
-  } catch (err) {
-    // Fallback: load via Image DOM element
-    const imgElem = new Image();
-    imgElem.crossOrigin = 'anonymous';
-    imgElem.onload = async () => {
-      try {
-        const canvas = document.createElement('canvas');
-        canvas.width = imgElem.naturalWidth || 1920;
-        canvas.height = imgElem.naturalHeight || 1080;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(imgElem, 0, 0);
-        canvas.toBlob(async (blob) => {
-          if (blob) {
-            const loaded = await loadImageFromBlob(blob, 'fantasy-river-battlemap.jpg');
-            handleImageLoaded(loaded);
-          }
-        }, 'image/jpeg');
-      } catch (fallbackErr) {
-        showError('Unable to load sample map: ' + fallbackErr.message);
-      }
-    };
-    imgElem.onerror = () => {
-      showError('Failed to load sample battlemap');
-    };
-    imgElem.src = 'sample-map.jpg';
+  const pathsToTry = [
+    new URL('./sample-map.jpg', window.location.href).href,
+    new URL('../sample-map.jpg', import.meta.url).href,
+    './sample-map.jpg',
+    'sample-map.jpg',
+    'assets/sample-map.jpg'
+  ];
+
+  for (const p of pathsToTry) {
+    try {
+      const img = await loadImageFromUrl(p);
+      img.fileName = 'fantasy-river-battlemap.jpg';
+      handleImageLoaded(img);
+      showToast('Loaded sample battlemap');
+      return;
+    } catch (_) {
+      // Continue to next path candidate
+    }
   }
+
+  // Fallback: load via standard Image DOM element
+  const imgElem = new Image();
+  imgElem.onload = async () => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = imgElem.naturalWidth || 1920;
+      canvas.height = imgElem.naturalHeight || 1080;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(imgElem, 0, 0);
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          const loaded = await loadImageFromBlob(blob, 'fantasy-river-battlemap.jpg');
+          handleImageLoaded(loaded);
+          showToast('Loaded sample battlemap');
+        }
+      }, 'image/jpeg');
+    } catch (fallbackErr) {
+      showError('Unable to load sample map: ' + fallbackErr.message);
+    }
+  };
+  imgElem.onerror = () => {
+    showError('Failed to load sample battlemap. Please check file path.');
+  };
+  imgElem.src = './sample-map.jpg';
 }
 
 /**

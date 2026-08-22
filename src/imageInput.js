@@ -104,7 +104,7 @@ export async function loadImageFromUrl(url) {
 
   let response;
   try {
-    response = await fetch(trimmed, { mode: 'cors' });
+    response = await fetch(trimmed);
   } catch (err) {
     throw new Error(
       'This website does not allow direct loading (CORS restricted). Please right-click and save the image to your computer, then drag & drop or browse for it here.'
@@ -127,7 +127,7 @@ export async function loadImageFromUrl(url) {
 
   let fileName = 'web-image';
   try {
-    const parsed = new URL(trimmed);
+    const parsed = new URL(trimmed, typeof window !== 'undefined' ? window.location.href : 'http://localhost');
     const pathname = parsed.pathname;
     const base = pathname.substring(pathname.lastIndexOf('/') + 1);
     if (base) {
