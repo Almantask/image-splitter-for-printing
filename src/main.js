@@ -54,7 +54,6 @@ const elements = {
   errorClose: document.getElementById('error-close'),
   
   // Step 2 Settings
-  presetPills: document.querySelectorAll('.preset-pill'),
   paperFormatSelect: document.getElementById('paper-format'),
   paperDimHint: document.getElementById('paper-dim-hint'),
   orientationRadios: document.querySelectorAll('input[name="orientation"]'),
@@ -263,17 +262,6 @@ function updateLayoutAndPreview(options = { announce: false }) {
   if (elements.paperDimHint) {
     elements.paperDimHint.textContent = `${state.layout.paper.width} × ${state.layout.paper.height} mm`;
   }
-
-  // Update preset pills active state
-  elements.presetPills.forEach((pill) => {
-    const pSheets = Number(pill.dataset.sheets);
-    const pPaper = pill.dataset.paper;
-    if (pSheets === state.sheetsWide && pPaper === state.paperFormat) {
-      pill.classList.add('active');
-    } else {
-      pill.classList.remove('active');
-    }
-  });
 
   // Warnings
   if (elements.dpiWarningBadge) {
@@ -628,19 +616,6 @@ function setupEventListeners() {
         }
       }
     }
-  });
-
-  // Presets Pills
-  elements.presetPills.forEach((pill) => {
-    pill.addEventListener('click', () => {
-      const sheets = Number(pill.dataset.sheets) || 3;
-      const paper = pill.dataset.paper || 'A4';
-      state.sheetsWide = sheets;
-      state.paperFormat = paper;
-      if (elements.paperFormatSelect) elements.paperFormatSelect.value = paper;
-      updateLayoutAndPreview({ announce: true });
-      showToast(`Applied preset: ${sheets} sheets wide (${paper})`);
-    });
   });
 
   // Settings: Paper Format

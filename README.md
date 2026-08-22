@@ -33,7 +33,6 @@ Open the application directly in your browser with zero installation:
   - Orientation toggle: **Portrait** / **Landscape**
   - Custom page margins in millimeters (0–25 mm) with slider + steppers
   - Poster width in sheets (1–20) with live auto-computed height and sheet count
-  - 1-click quick size presets (2, 3, 4, 6 sheets)
 - **Live Canvas Preview**:
   - Real-time scaled visualization of the tiled poster
   - Viewport toolbar with Zoom In (+), Zoom Out (-), Fit Reset, and Guides/Badges toggles

@@ -40,7 +40,6 @@ All notable changes to **Map to Poster** are documented here.
 - **Modern User Experience**:
   - Dark mode and Light mode with persistent theme switcher.
   - Image summary card with auto-generated thumbnail and aspect ratio badge.
-  - Quick poster size preset pills (2, 3, 4, 6 sheets).
   - In-app poster printing and assembly guide modal.
 - **Automated CI/CD**:
   - GitHub Actions automated testing and deployment to GitHub Pages.
