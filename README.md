@@ -2,7 +2,7 @@
 
 [![Deploy to GitHub Pages](https://github.com/Almantask/image-splitter-for-printing/actions/workflows/deploy.yml/badge.svg)](https://github.com/Almantask/image-splitter-for-printing/actions/workflows/deploy.yml)
 [![Release](https://img.shields.io/github/v/release/Almantask/image-splitter-for-printing?color=blue)](https://github.com/Almantask/image-splitter-for-printing/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 > 🚀 **Live Application:** [https://almantask.github.io/image-splitter-for-printing/](https://almantask.github.io/image-splitter-for-printing/)
 
@@ -125,4 +125,4 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 
 ## License
 
-MIT
+Apache-2.0 (Apache License, Version 2.0). See [LICENSE](LICENSE) for details.
