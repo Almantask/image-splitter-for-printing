@@ -382,52 +382,39 @@ function handleClearImage() {
 }
 
 /**
- * Loads default colorful demo image.
+ * Loads the user-provided high-resolution battle map demo sample.
  */
-function loadSampleImage() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 3000;
-  canvas.height = 2000;
-  const ctx = canvas.getContext('2d');
-
-  const grad = ctx.createLinearGradient(0, 0, 3000, 2000);
-  grad.addColorStop(0, '#3b82f6');
-  grad.addColorStop(0.5, '#8b5cf6');
-  grad.addColorStop(1, '#ec4899');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 3000, 2000);
-
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-  for (let i = 0; i < 18; i++) {
-    ctx.beginPath();
-    ctx.arc(
-      (i * 180 + 200) % 3000,
-      ((i * 240 + 150) % 2000),
-      120 + (i * 20),
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
+async function loadSampleImage() {
+  try {
+    const img = await loadImageFromUrl('sample-map.jpg');
+    img.fileName = 'fantasy-river-battlemap.jpg';
+    handleImageLoaded(img);
+  } catch (err) {
+    // Fallback: load via Image DOM element
+    const imgElem = new Image();
+    imgElem.crossOrigin = 'anonymous';
+    imgElem.onload = async () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = imgElem.naturalWidth || 1920;
+        canvas.height = imgElem.naturalHeight || 1080;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(imgElem, 0, 0);
+        canvas.toBlob(async (blob) => {
+          if (blob) {
+            const loaded = await loadImageFromBlob(blob, 'fantasy-river-battlemap.jpg');
+            handleImageLoaded(loaded);
+          }
+        }, 'image/jpeg');
+      } catch (fallbackErr) {
+        showError('Unable to load sample map: ' + fallbackErr.message);
+      }
+    };
+    imgElem.onerror = () => {
+      showError('Failed to load sample battlemap');
+    };
+    imgElem.src = 'sample-map.jpg';
   }
-
-  // Clean typographic poster content
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 150px system-ui, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('MAP TO POSTER', 1500, 900);
-
-  ctx.font = '500 68px system-ui, sans-serif';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-  ctx.fillText('High-Res Map & Artwork Demo (3000 × 2000 px)', 1500, 1100);
-
-  canvas.toBlob((blob) => {
-    if (blob) {
-      loadImageFromBlob(blob, 'sample-map-poster.png')
-        .then(handleImageLoaded)
-        .catch((err) => showError(err.message));
-    }
-  }, 'image/png');
 }
 
 /**
