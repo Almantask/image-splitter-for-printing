@@ -1,0 +1,56 @@
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Release Notes
+        id: release_notes
+        run: |
+          TAG="${{ github.event.inputs.tag_name || github.ref_name }}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          cat << 'EOF' > release_body.md
+          ## 🌐 Live Deployed Application
+          **Access the live web app:** [https://almantask.github.io/image-splitter-for-printing/](https://almantask.github.io/image-splitter-for-printing/)
+
+          ---
+
+          ## 🚀 What's New in v1.0.0
+
+          - **Zero Server / 100% Client-Side**: All image tiling, processing, and PDF assembly occur directly in the browser with no server uploads.
+          - **Multi-Input Support**: Drag & drop, local file picker, remote URL loader with CORS error protection, clipboard paste (`Ctrl+V`), and sample demo poster.
+          - **ISO 216 Paper Support**: Full A0–A6 paper dimension handling in Portrait and Landscape orientations.
+          - **Live Canvas Preview**: Interactive zoom & pan controls, page order badges, margin cut guides, and hover inspection tooltips.
+          - **Print-Ready PDF Export**: High-resolution multi-page PDF generator using vendored jsPDF capped at optimal 300 DPI for high print fidelity.
+          - **WCAG 2.1 AA Compliant**: High-contrast color palette, keyboard accessibility, screen reader live announcements (`aria-live`), and skip link.
+          - **Modern UI**: Dark and Light theme switcher with persistent settings, quick size presets, and synchronized sliders/steppers.
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release_notes.outputs.tag }}
+          name: Release ${{ steps.release_notes.outputs.tag }}
+          body_path: release_body.md
+          draft: false
+          prerelease: false
