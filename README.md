@@ -10,12 +10,68 @@
 
 Inspired by [rasterbator.net](https://rasterbator.net/), stripped to the essentials: load a map or image, choose paper and layout settings, see a live preview of the tiled poster with sheet boundaries and effective print DPI, and export a ready-to-print multi-page PDF.
 
+<p align="center">
+  <img src="docs/screenshots/layout-landscape-margin.jpg" alt="Map to Poster live preview: a battlemap tiled across a 3×3 landscape A4 grid with 10 mm trim margins, page numbers, and print DPI readout">
+</p>
+<p align="center"><em>Live tiled preview — landscape A4, 10 mm trim margins, numbered sheets, and print-quality warnings</em></p>
+
 ---
 
 ## Live Demo
 
 Open the application directly in your browser with zero installation:  
 👉 **[https://almantask.github.io/image-splitter-for-printing/](https://almantask.github.io/image-splitter-for-printing/)**
+
+---
+
+## Screenshots
+
+### Upload, layout, and live preview
+
+Drop a file, paste from the clipboard, load a URL, or click **Sample**. The left pane keeps map input and paper settings together; the right pane shows the poster grid, dimensions, sheet count, effective DPI, and a one-click PDF download.
+
+<p align="center">
+  <img src="docs/screenshots/preview-dark.jpg" alt="Dark-mode workspace after loading the sample battlemap: image summary card, A4 portrait layout, 3×2 sheet grid with remainder hatching, and a low-DPI warning">
+</p>
+<p align="center"><em>Dark mode with a loaded map — thumbnail summary, A4 portrait tiling, remainder hatching, and a low-resolution warning</em></p>
+
+### Empty workspace
+
+Before an image is loaded, the drop zone, URL field, paper controls, and empty preview are all visible on one page. Download stays disabled until a map is ready.
+
+<p align="center">
+  <img src="docs/screenshots/empty-dark.jpg" alt="Empty dark-mode workspace with drag-and-drop upload, URL loader, sample button, paper settings, and an empty live preview" width="48%">
+  &nbsp;
+  <img src="docs/screenshots/empty-light.jpg" alt="Empty light-mode workspace with the same upload and layout controls" width="48%">
+</p>
+<p align="center"><em>Empty state in dark and light themes — drag &amp; drop, URL load, built-in sample, and layout controls</em></p>
+
+### Light mode
+
+Theme preference is stored in the browser. Layout math, sheet badges, and remainder hatching stay the same in both themes.
+
+<p align="center">
+  <img src="docs/screenshots/preview-light.jpg" alt="Light-mode workspace with the sample battlemap tiled across six A4 portrait sheets">
+</p>
+<p align="center"><em>Light mode — same live preview, sheet badges, and download bar</em></p>
+
+### Print & assembly guide
+
+The in-app guide covers 100% scale printing, margin trimming, and left-to-right / top-to-bottom sheet order.
+
+<p align="center">
+  <img src="docs/screenshots/print-guide.jpg" alt="Poster Printing & Assembly Guide modal with three steps: print at actual size, trim margins, and assemble in reading order">
+</p>
+<p align="center"><em>Print Guide modal — actual-size printing, trim margins, assemble in reading order</em></p>
+
+### Mobile layout
+
+On narrower screens the controls stack above the preview so the same workflow works on a phone.
+
+<p align="center">
+  <img src="docs/screenshots/mobile-preview.jpg" alt="Mobile layout with stacked map input, layout settings, live preview, and download button" width="360">
+</p>
+<p align="center"><em>Stacked mobile layout</em></p>
 
 ---
 
@@ -28,15 +84,17 @@ Open the application directly in your browser with zero installation:
   - Direct URL image loading with CORS error handling
   - Paste directly from clipboard (`Ctrl+V` / `Cmd+V`)
   - Instant built-in map demo sample
+- **Image Summary Card**: Thumbnail, file name, pixel size, and aspect-ratio badge, plus Replace / Clear actions.
 - **Comprehensive Layout Controls**:
   - Standard ISO 216 paper formats: **A0, A1, A2, A3, A4, A5, A6**
   - Orientation toggle: **Portrait** / **Landscape**
-  - Custom page margins in millimeters (0–25 mm) with slider + steppers
+  - Custom page margins in millimeters (0–25 mm) with slider, steppers, and 0 / 5 / 10 mm quick tags
   - Poster width in sheets (1–20) with live auto-computed height and sheet count
 - **Live Canvas Preview**:
   - Real-time scaled visualization of the tiled poster
-  - Viewport toolbar with Zoom In (+), Zoom Out (-), Fit Reset, and Guides/Badges toggles
+  - Viewport toolbar with Zoom In (+), Zoom Out (−), Fit Reset, and Guides/Badges toggles
   - Interactive pointer hover inspection with sheet tooltips
+  - Numbered page-order badges on each sheet
   - Diagonal hatching for partial/uncovered remainder areas
   - Live dimensional readout (cm / meters), total area in $m^2$, sheet count formula, and effective print DPI
   - Visual warning alerts for low print quality (<60 DPI) or large sheet volume (>200 sheets)
@@ -49,6 +107,7 @@ Open the application directly in your browser with zero installation:
 - **Accessibility & Design**:
   - **WCAG 2.1 AA Compliant**: Skip link, full keyboard operability, screen reader live announcements, and high-contrast colors.
   - **Dark & Light Mode**: Integrated theme switcher with persistent settings.
+  - In-app poster printing and assembly guide modal.
 
 ---
 
@@ -88,6 +147,8 @@ npm test
 │   └── workflows/
 │       ├── deploy.yml          # GitHub Pages CI/CD workflow
 │       └── release.yml         # GitHub Release automated publisher
+├── docs/
+│   └── screenshots/            # README screenshots of current UI
 ├── index.html                  # Semantic single-page layout
 ├── styles.css                  # Modern design system & responsive styling
 ├── src/
